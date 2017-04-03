@@ -76,7 +76,7 @@ cenpercountry
 
 xlab <- expression(paste("Temperature (",degree,"C)"))
 
-pdf("figureS1.pdf",width=8,height=9)
+pdf("figureS1_new.pdf",width=8,height=9)
 layout(matrix(c(0,1,1,2,2,0,rep(3:8,each=2),0,9,9,10,10,0),ncol=6,byrow=T))
 par(mar=c(4,3.8,3,2.4),mgp=c(2.5,1,0),las=1)
 
@@ -91,11 +91,10 @@ for(i in seq(length(dlist))) {
                                                                   varper/100, na.rm=TRUE))
   
   bvar <- do.call(onebasis,argvar)
-  pred <- crosspred(bvar,coef=blup3[[i]]$blup,vcov=blup3[[i]]$vcov,
+  pred <- crosspred(bvar,coef=blup[[i]]$blup,vcov=blup[[i]]$vcov,
                     model.link="log",by=0.1,cen=mintempcity[i])
   
-  
-  
+    
   df <- data.frame(matrix(nrow=length(pred$predvar), ncol=4))
   colnames(df) <- c("temp", "RRfit", "RRlow", "RRhigh")
   df$temp <- pred$predvar
@@ -131,7 +130,7 @@ for(i in seq(length(dlist))) {
   abline(v=c(per[i,c("1%","99%")]),lty=2)
 }
 
-dev.off(); 
+dev.off();  
 
 par(opar) 
 
