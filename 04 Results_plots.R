@@ -13,7 +13,7 @@
 ###############################################################################
 
 ################################################################################
-# PLOTS
+# PLOTS AND RESULTS
 ################################################################################
 
 ####################################################################
@@ -76,7 +76,7 @@ cenpercountry
 
 xlab <- expression(paste("Temperature (",degree,"C)"))
 
-pdf("figureS1.pdf",width=8,height=9)
+pdf("figureS3_new.pdf",width=8,height=9)
 layout(matrix(c(0,1,1,2,2,0,rep(3:8,each=2),0,9,9,10,10,0),ncol=6,byrow=T))
 par(mar=c(4,3.8,3,2.4),mgp=c(2.5,1,0),las=1)
 
@@ -88,21 +88,37 @@ for(i in seq(length(dlist))) {
   data <- dlist[[i]]
   # 
   argvar <- list(x=data$tempmax,fun="bs",degree=2, knots=quantile(data$tempmax, 
-    varper/100, na.rm=TRUE))
-
+                                                                  varper/100, na.rm=TRUE))
+  
   bvar <- do.call(onebasis,argvar)
   pred <- crosspred(bvar,coef=blup3[[i]]$blup,vcov=blup3[[i]]$vcov,
                     model.link="log",by=0.1,cen=mintempcity[i])
-  plot(pred,type="n",ylim=c(0.6,1.3),yaxt="n",lab=c(6,5,7),xlab=xlab,ylab="Percent change (%)",
-       main=provincies_n[i])
+  
+  
+  
+  df <- data.frame(matrix(nrow=length(pred$predvar), ncol=4))
+  colnames(df) <- c("temp", "RRfit", "RRlow", "RRhigh")
+  df$temp <- pred$predvar
+  df$RRfit <- (pred$allRRfit-1)*100
+  df$RRlow <- (pred$allRRlow-1)*100
+  df$RRhigh <- (pred$allRRhigh-1)*100
+  
+  plot(df$temp, df$RRfit, type="n", ylim=c(-55, 40), 
+       ylab="Percent change (%)",xlab=xlab, lwd=2,col="white",
+       cex.axis = 0.8, main=provincies_n[i], lab=c(6,5,7),
+       yaxt="n", axes=F)
+  polygon(c(df$temp,rev(df$temp)),c(df$RRlow,rev(df$RRhigh)),col = "grey89", border = FALSE)
   ind1 <- pred$predvar<=mintempcity[i]
   ind2 <- pred$predvar>=mintempcity[i]
-  lines(pred$predvar[ind1],pred$allRRfit[ind1],col=4,lwd=1.5)
-  lines(pred$predvar[ind2],pred$allRRfit[ind2],col=2,lwd=1.5)
-  axis(2,at=1:6.5*0.2, labels=c(-10,0,10,20))
+  lines(df$temp[ind1],df$RRfit[ind1],col=4,lwd=2)
+  lines(df$temp[ind2],df$RRfit[ind2],col=2,lwd=2)
+  axis(2,at=-2:2.4*20, col.axis="black", cex.axis=0.8)
+  axis(1, col.axis="black")
+  abline(h=0)
+  
   breaks <- c(min(data$tempmax,na.rm=T)-1,seq(pred$predvar[1],
                                               pred$predvar[length(pred$predvar)],
-    length=30),max(data$tempmax,na.rm=T)+1)
+                                              length=30),max(data$tempmax,na.rm=T)+1)
   hist <- hist(data$tempmax,breaks=breaks,plot=F)
   hist$density <- hist$density/max(hist$density)*0.7
   prop <- max(hist$density)/max(hist$counts)
@@ -110,13 +126,14 @@ for(i in seq(length(dlist))) {
   par(new=TRUE)
   plot(hist,ylim=c(0,max(hist$density)*2.0),axes=F,ann=F,col=grey(0.95),freq=F)
   axis(4,at=counts*prop,labels=counts,cex.axis=0.7)
+  #mtext("N",4,line=-0.5,at=mean(counts*prop),cex=0.5)
   abline(v=mintempcity[i],lty=1)
   abline(v=c(per[i,c("1%","99%")]),lty=2)
-  if (i==1) {mtext(text = "Figure 1: Temperature-work injuries association in 50
-                   Spanish provinces (1994-203)", side = 3, outer = TRUE, line=0)}
-  }
+}
 
-dev.off(); par(opar) 
+dev.off(); 
+
+par(opar) 
 
 
 
