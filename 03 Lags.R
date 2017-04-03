@@ -91,7 +91,7 @@ mvpredlagheat <- predict(mvlagheat,datanew,vcov=T,format="list")
 # PREDICT THE POOLED LAG-RESPONSE ASSOCIATIONS
 
 # OBTAIN THE PREDICTIONS
-blag <- do.call(onebasis,c(list(x=seq(0,lag2)),attr(cb3,"arglag")))
+blag <- do.call(onebasis,c(list(x=seq(0,lag2)),attr(cb,"arglag")))
 
 cplagheat <- crosspred(blag,coef=mvpredlagheat$fit,vcov=mvpredlagheat$vcov,
                     model.link="log",at=0:7)
