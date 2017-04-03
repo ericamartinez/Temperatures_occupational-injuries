@@ -6,7 +6,7 @@
 #   ISGlobal, Center for Research in Environmental Epidemiology (CREAL) 
 #   April 2017
 #   
-#	This code reproduces the analyses, which is based on the methodoly 
+#	This code reproduces the analyses, which is based on the methodology 
 #   Distributed Lag Non-Linear Models, developed by Antonio Gasparrini 
 #	(http://www.ag-myresearch.com/)
 #
