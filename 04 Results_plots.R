@@ -76,7 +76,7 @@ cenpercountry
 
 xlab <- expression(paste("Temperature (",degree,"C)"))
 
-pdf("figureS3_new.pdf",width=8,height=9)
+pdf("figureS1.pdf",width=8,height=9)
 layout(matrix(c(0,1,1,2,2,0,rep(3:8,each=2),0,9,9,10,10,0),ncol=6,byrow=T))
 par(mar=c(4,3.8,3,2.4),mgp=c(2.5,1,0),las=1)
 
