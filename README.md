@@ -4,5 +4,7 @@ This repository contains the code used in the paper "Evaluation of the impact of
 
 The code includes the files (from 00 to 05) to reproduce the analyses that we perform in the manuscript. 
 
-Do not hesitate to contact us for comments or questions: erica.martinez@isglobal.org
+Do not hesitate to contact us for comments or questions: 
+
+Hello
 
